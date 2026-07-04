@@ -9,6 +9,10 @@ use App\Http\Controllers\Api\V2\CommentReplyController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
+Route::controller(BuildFeatureController::class)->prefix('features')->group(function () {
+    Route::get('/build/completed', 'completedBuildings');
+});
+
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::controller(TutorialController::class)->prefix('tutorials')->group(function () {
         Route::withoutMiddleware(['auth:sanctum', 'verified'])->group(function () {

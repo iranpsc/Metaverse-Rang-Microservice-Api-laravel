@@ -74,4 +74,12 @@ class Building extends Pivot
     {
         return $this->belongsTo(BuildingModel::class, 'model_id');
     }
+
+    /**
+     * Scope to buildings whose construction has finished.
+     */
+    public function scopeConstructionCompleted($query)
+    {
+        return $query->where('construction_end_date', '<', now());
+    }
 }

@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StartBuildingFeatureRequest;
 use App\Http\Requests\UpdateBuildingFeatureRequest;
 use App\Http\Resources\V2\BuildingModelResource;
+use App\Http\Resources\V2\CompletedBuildingResource;
 use App\Models\Feature;
-use App\Http\Resources\FeatureResource;
+use App\Models\Feature\Building;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Http;
@@ -18,6 +19,18 @@ use Illuminate\Support\Facades\DB;
 
 class BuildFeatureController extends Controller
 {
+    public function completedBuildings()
+    {
+        $buildings = Building::constructionCompleted()
+            ->with([
+                'feature.properties:id,feature_id',
+                'buildingModel:id,attributes',
+            ])
+            ->paginate(10);
+
+        return CompletedBuildingResource::collection($buildings);
+    }
+
     public function getBuildPackage(Feature $feature)
     {
         $feature->load('properties:id,feature_id,area,density,karbari', 'owner:id', 'coordinates');
